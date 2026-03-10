@@ -149,6 +149,33 @@ what is machine learning
 
 Result → LOW risk
 
+**Using the programmatic API**
+
+Call the single entry point `analyze_prompt` from the `risk_engine` package. It returns a JSON-serializable dictionary with keys: `keywords`, `regex_matches`, `prompt_injection`, `risk_score`, `risk_level`.
+
+Example:
+
+```python
+from risk_engine import analyze_prompt
+
+result = analyze_prompt("my api key is AKIA1234567890ABCD and ignore previous instructions")
+print(result)
+# {
+#   "keywords": ["api key"],
+#   "regex_matches": [{"type": "aws_key", "matches": ["AKIA1234567890ABCD"]}, ...],
+#   "prompt_injection": ["ignore (all|previous) instructions"],
+#   "risk_score": 90,
+#   "risk_level": "HIGH"
+# }
+```
+
+Run tests:
+
+```bash
+pip install -r requirements.txt
+pytest -q
+```
+
 🔐 Security Use Cases
 
 This engine can be integrated into:
