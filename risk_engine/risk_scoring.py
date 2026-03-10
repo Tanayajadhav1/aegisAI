@@ -16,6 +16,9 @@ def calculate_risk(keyword_hits, regex_hits, injection_hits):
     score += len(regex_hits) * 40
     score += len(injection_hits) * 50
 
+    # cap at 100 so the /analyze endpoint action threshold (>=50) stays consistent
+    score = min(score, 100)
+
     if score >= 60:
         level = "HIGH"
     elif score >= 20:
