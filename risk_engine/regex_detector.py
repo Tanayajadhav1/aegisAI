@@ -9,6 +9,16 @@ REGEX_PATTERNS = {
     "password_assignment": r"(password|passwd|pwd)\s*[:=]\s*\S+"
 }
 
+# Additional professional patterns
+REGEX_PATTERNS.update({
+    # GitHub personal access tokens (ghp_ prefix)
+    "github_token": r"ghp_[A-Za-z0-9_]{36}",
+    # JWT-ish tokens (three base64url sections)
+    "jwt": r"\b[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\b",
+    # International-ish phone numbers
+    "phone": r"\b(?:\+?\d{1,3}[ -.]?)?(?:\(?\d{3}\)?[ -.]?){1,2}\d{4}\b"
+})
+
 def detect_regex(prompt):
 
     matches = []
