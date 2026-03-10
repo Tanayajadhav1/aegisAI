@@ -22,6 +22,7 @@ from .keyword_detector import detect_keywords
 from .regex_detector import detect_regex
 from .prompt_injection_detector import detect_prompt_injection
 from .risk_scoring import calculate_risk
+from .ml_detector import predict as ml_predict
 
 # ──────────────────────────────────────────────
 # FastAPI app
@@ -66,6 +67,10 @@ def analyze_endpoint(payload: PromptPayload) -> Dict[str, Any]:
     print(f"          Keywords      : {result['keywords']}")
     print(f"          Regex Hits    : {[m['type'] for m in result['regex_matches']]}")
     print(f"          Injections    : {result['prompt_injection']}")
+    mlp = result.get("ml_prediction", {})
+    ml_name = mlp.get("name", "SAFE")
+    ml_score = mlp.get("score", 0.0)
+    print(f"          ML Detect     : {ml_name} (confidence={ml_score:.2f})")
     print(f"          Prompt Preview: {payload.prompt[:120]}")
 
     return {
@@ -75,6 +80,7 @@ def analyze_endpoint(payload: PromptPayload) -> Dict[str, Any]:
         "keywords_found": result["keywords"],
         "regex_matches":  result["regex_matches"],
         "prompt_injection": result["prompt_injection"],
+        "ml_prediction": result.get("ml_prediction", {}),
         "action":         action,
         "prompt_preview": payload.prompt[:200],
     }
@@ -114,12 +120,17 @@ def analyze_prompt(prompt: str) -> Dict[str, Any]:
     regex_matches = detect_regex(prompt)
     injections    = detect_prompt_injection(prompt)
 
-    score, level  = calculate_risk(keywords, regex_matches, injections)
+    # ML classifier (optional). If `transformers` or the local model is not
+    # available, `ml_predict` returns a safe default with an `error` key.
+    ml_result = ml_predict(prompt)
+
+    score, level  = calculate_risk(keywords, regex_matches, injections, ml_prediction=ml_result)
 
     return {
         "keywords":         keywords,
         "regex_matches":    regex_matches,
         "prompt_injection": injections,
+        "ml_prediction":    ml_result,
         "risk_score":       score,
         "risk_level":       level,
     }

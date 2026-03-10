@@ -213,3 +213,36 @@ Tanaya Jadhav
 📜 License
 
 This project is open-source and available under the MIT License.
+
+**ML Model Integration**
+
+If you have a fine-tuned Hugging Face `text-classification` model (DistilBERT) exported
+with `model.save_pretrained()` and `tokenizer.save_pretrained()`, you can integrate it
+locally for semantic prompt-injection detection.
+
+1. Unzip the model archive into the project root (example uses `my_risk_model`):
+
+```bash
+unzip my_risk_model.zip -d ./my_risk_model
+```
+
+2. By default the engine expects the model directory at `./my_risk_model`.
+	You can also set the env var `RISK_MODEL_PATH` to point elsewhere.
+
+3. Install the ML dependencies (may require a specific `torch` wheel for Windows):
+
+```bash
+pip install -r requirements.txt
+# or install torch first per https://pytorch.org/ then `pip install transformers`
+```
+
+4. The ML detector is integrated automatically. It is lazy-loaded on first inference
+	and will return a safe default if the `transformers` package or local model is missing.
+
+5. The analyze endpoint response includes an `ml_prediction` object:
+
+```json
+{"label": 1, "score": 0.95, "name": "PROMPT_INJECTION"}
+```
+
+Security note: keep the model files private and avoid including them in public repos.

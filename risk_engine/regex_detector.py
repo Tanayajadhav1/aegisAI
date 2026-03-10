@@ -5,6 +5,7 @@ REGEX_PATTERNS = {
     "aws_key": r"AKIA[0-9A-Z]{14,20}",
     "generic_api_key": r"\b[A-Za-z0-9_\-]{20,45}\b",
     "sk_api_key": r"sk-[A-Za-z0-9]{20,}",
+    "client_id": r"\bCL-\d{5}\b",
     "email": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b",
     "password_assignment": r"(password|passwd|pwd)\s*[:=]\s*\S+"
 }
