@@ -3,5 +3,3 @@ uvicorn
 requests
 pydantic
 pytest
-transformers
-torch
