@@ -9,7 +9,7 @@ const [collapsed,setCollapsed] = useState(false)
 
 return(
 
-<div className={`bg-slate-900 border-r border-cyan-500/20 h-screen p-4 transition-all duration-300 
+<div className={`w-64 bg-slate-900 border-r border-cyan-500/20  p-4 transition-all duration-300 
 ${collapsed ? "w-20" : "w-64"}`}>
 
 {/* HEADER */}
