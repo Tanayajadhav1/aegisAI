@@ -5,8 +5,15 @@ REGEX_PATTERNS = {
     "aws_key": r"AKIA[0-9A-Z]{14,20}",
     "generic_api_key": r"\b[A-Za-z0-9_\-]{20,45}\b",
     "sk_api_key": r"sk-[A-Za-z0-9]{20,}",
+    "internal_discussion" : r"\binternal\s+(discussion|meeting|conversation)\b",
     "client_id": r"\bCL-\d{5}\b",
     "email": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b",
+    "ignore_instructions": r"ignore (all )?(previous|prior) instructions",
+    "disregard_instructions": r"disregard (all )?(previous|prior) instructions",
+    "forget_instructions": r"forget (all )?(previous|prior) instructions",
+    "override_system_instructions": r"override system instructions",
+    "act_as_if_no_restrictions": r"act as if you have no restrictions",
+    "reveal_confidential_info": r"reveal (internal|confidential|private) information",
     "password_assignment": r"(password|passwd|pwd)\s*[:=]\s*\S+"
 }
 
