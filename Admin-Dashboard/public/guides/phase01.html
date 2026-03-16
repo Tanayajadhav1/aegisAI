@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AegisAI Phase 1</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+background:linear-gradient(135deg,#07141f,#0d2c3f);
+color:white;
+}
+
+.container{
+width:90%;
+margin:auto;
+padding:60px 0;
+}
+
+/* HEADER */
+
+.hero{
+text-align:center;
+margin-bottom:60px;
+}
+
+.hero h1{
+font-size:50px;
+color:#35e6ff;
+}
+
+.hero span{
+color:#00ff9d;
+}
+
+.hero p{
+margin-top:15px;
+color:#b9c6d0;
+font-size:18px;
+}
+
+/* SECTION TITLE */
+
+.section-title{
+font-size:28px;
+margin-bottom:30px;
+color:#35e6ff;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+/* CARD GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:20px;
+}
+
+.card{
+background:#0f2c40;
+padding:25px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,0.07);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+border:1px solid #00eaff;
+}
+
+.card i{
+font-size:28px;
+margin-bottom:10px;
+}
+
+/* ICON COLORS */
+
+.blue{color:#00eaff;}
+.green{color:#00ff9d;}
+.orange{color:#ffb347;}
+.red{color:#ff6b6b;}
+.purple{color:#a78bfa;}
+
+/* WORKFLOW */
+
+.workflow{
+display:flex;
+align-items:center;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.step{
+flex:1;
+min-width:180px;
+background:#0f2c40;
+padding:20px;
+border-radius:10px;
+text-align:center;
+}
+
+.step i{
+font-size:28px;
+margin-bottom:8px;
+color:#00ffc8;
+}
+
+/* ARROWS */
+
+.arrow{
+font-size:30px;
+color:#00eaff;
+animation:arrowMove 1.2s infinite alternate;
+}
+
+@keyframes arrowMove{
+from{transform:translateX(0)}
+to{transform:translateX(8px)}
+}
+
+/* PLATFORM LIST */
+
+.list{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.list ul{
+background:#0f2c40;
+padding:25px;
+border-radius:10px;
+list-style:none;
+}
+
+.list li{
+margin-bottom:10px;
+}
+
+.list i{
+margin-right:8px;
+}
+
+/* TECH STACK */
+
+.stack{
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+margin-top:20px;
+}
+
+.stack span{
+background:#0f2c40;
+border:1px solid #00eaff;
+padding:10px 16px;
+border-radius:20px;
+font-size:14px;
+}
+
+/* FOOTER */
+
+.footer{
+text-align:center;
+margin-top:80px;
+font-size:20px;
+color:#00ffc8;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<!-- HEADER -->
+
+<div class="hero">
+
+<h1><i class="fa-solid fa-shield-halved"></i> Aegis<span>AI</span></h1>
+
+<p>Phase 1 – Browser Extension Firewall<br>
+Detects risky AI prompts before they are sent and prevents sensitive data leakage.</p>
+
+</div>
+
+<!-- INFO -->
+
+<h2 class="section-title"><i class="fa-solid fa-circle-info"></i> Info</h2>
+
+<div class="grid">
+
+<div class="card">
+<i class="fa-solid fa-eye blue"></i>
+<h3>Real-Time Monitoring</h3>
+<p>Prompts are intercepted before being sent to AI platforms.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-triangle-exclamation orange"></i>
+<h3>Risk Detection</h3>
+<p>Each prompt is analyzed by the risk engine.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-ban red"></i>
+<h3>Prompt Blocking</h3>
+<p>High-risk prompts are automatically blocked.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-chart-line green"></i>
+<h3>Admin Visibility</h3>
+<p>Security dashboard tracks blocked prompts and activity.</p>
+</div>
+
+</div>
+
+<!-- WORKFLOW -->
+
+<h2 class="section-title"><i class="fa-solid fa-diagram-project"></i> Workflow</h2>
+
+<div class="workflow">
+
+<div class="step">
+<i class="fa-solid fa-download"></i>
+<h4>Install Extension</h4>
+</div>
+
+<div class="arrow">➜</div>
+
+<div class="step">
+<i class="fa-solid fa-key"></i>
+<h4>Enter Company ID</h4>
+</div>
+
+<div class="arrow">➜</div>
+
+<div class="step">
+<i class="fa-solid fa-magnifying-glass"></i>
+<h4>Capture Prompt</h4>
+</div>
+
+<div class="arrow">➜</div>
+
+<div class="step">
+<i class="fa-solid fa-shield"></i>
+<h4>Analyze Risk</h4>
+</div>
+
+<div class="arrow">➜</div>
+
+<div class="step">
+<i class="fa-solid fa-ban"></i>
+<h4>Block if High Risk</h4>
+</div>
+
+<div class="arrow">➜</div>
+
+<div class="step">
+<i class="fa-solid fa-chart-simple"></i>
+<h4>Admin Dashboard</h4>
+</div>
+
+</div>
+
+<!-- SUPPORTED -->
+
+<h2 class="section-title"><i class="fa-solid fa-layer-group"></i> Coverage</h2>
+
+<div class="list">
+
+<ul>
+
+<h3><i class="fa-solid fa-browser blue"></i> Supported Browsers</h3>
+
+<li><i class="fa-brands fa-chrome green"></i> Google Chrome</li>
+<li><i class="fa-brands fa-edge blue"></i> Microsoft Edge</li>
+<li><i class="fa-brands fa-opera red"></i> Opera</li>
+<li><i class="fa-brands fa-brave orange"></i> Brave</li>
+
+</ul>
+
+<ul>
+
+<h3><i class="fa-solid fa-robot purple"></i> AI Platforms Protected</h3>
+
+<li><i class="fa-solid fa-check green"></i> ChatGPT</li>
+<li><i class="fa-solid fa-check green"></i> Perplexity AI</li>
+<li><i class="fa-solid fa-check green"></i> Microsoft Copilot</li>
+<li><i class="fa-solid fa-check green"></i> Cursor AI</li>
+
+</ul>
+
+</div>
+
+<!-- FEATURES -->
+
+<h2 class="section-title"><i class="fa-solid fa-star"></i> Features</h2>
+
+<div class="grid">
+
+<div class="card">
+<i class="fa-solid fa-lock green"></i>
+<p>Prompt interception before AI processing</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-gauge blue"></i>
+<p>Risk score calculation engine</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-fire red"></i>
+<p>Instant high-risk prompt blocking</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-database orange"></i>
+<p>Security logging for organizations</p>
+</div>
+
+</div>
+
+<!-- LIMITATIONS -->
+
+<h2 class="section-title"><i class="fa-solid fa-circle-exclamation"></i> Limitations</h2>
+
+<div class="grid">
+
+<div class="card">
+<i class="fa-solid fa-globe purple"></i>
+<p>Only works on supported AI platforms.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-network-wired blue"></i>
+<p>Requires browser extension installation.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-user-secret red"></i>
+<p>Cannot monitor external AI usage outside managed devices.</p>
+</div>
+
+</div>
+
+<!-- TECH STACK -->
+
+<h2 class="section-title"><i class="fa-solid fa-code"></i> Tech Stack</h2>
+
+<div class="stack">
+
+<span>Chrome Extension API</span>
+<span>JavaScript</span>
+<span>React</span>
+<span>Node.js</span>
+<span>Python Risk Engine</span>
+<span>Firebase</span>
+
+</div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+🛡️ AegisAI ensures every AI prompt leaving your organization is monitored, analyzed, and secured.
+
+</div>
+
+</div>
+
+</body>
+</html>

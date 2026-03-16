@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "AI Prompt Detector",
+  "name": "AegisAI Prompt Firewall",
   "version": "1.0",
   "description": "Detect AI platforms and capture prompts before sending.",
   "permissions": [
@@ -8,18 +8,18 @@
     "storage",
     "scripting"
   ],
+  "action": {
+    "default_popup": "popup.html"
+  },
   "host_permissions": [
-    "*://chat.openai.com/*",
-    "*://claude.ai/*",
-    "*://gemini.google.com/*",
+    "https://chat.openai.com/*",
     "https://chatgpt.com/*",
-    "http://localhost:5000/*"
+    "https://www.perplexity.ai/*",
+    "https://copilot.microsoft.com/*",
+    "https://bing.com/*"
   ],
   "background": {
     "service_worker": "background.js"
-  },
-  "action": {
-    "default_popup": "popup.html"
   },
   "content_scripts": [
     {
@@ -31,5 +31,10 @@
       ],
       "js": ["content.js"]
     }
-  ]
+  ],
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
 }

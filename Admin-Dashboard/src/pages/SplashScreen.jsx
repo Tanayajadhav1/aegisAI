@@ -89,11 +89,31 @@ Security analytics dashboard
 
 <button
 onClick={()=>navigate("/login")}
-className="mt-16 mb-16 px-12 py-4 bg-cyan-500 hover:bg-cyan-600 rounded-lg text-lg font-bold shadow-lg shadow-cyan-500/40 transition-all duration-300 hover:scale-105"
+className="mt-16 mb-10 px-12 py-4 bg-cyan-500 hover:bg-cyan-600 rounded-lg text-lg font-bold shadow-lg shadow-cyan-500/40 transition-all duration-300 hover:scale-105"
 >
 Get Started
 </button>
+<br/>
+<button
+onClick={()=>{
 
+window.open("/downloads/Browser-Extension.zip","_blank")
+
+}}
+className="mt-6 mb-16 px-12 py-4 bg-green-500 hover:bg-green-600 rounded-lg text-lg font-bold"
+>
+Download Browser Extension
+</button>
+<button
+onClick={()=>{
+
+window.open("/guides/phase01.html","_blank")
+
+}}
+className="items-center ml-10 px-10 py-4 bg-blue-500 hover:bg-blue-600 rounded-lg text-lg font-bold transition"
+>
+Guide
+</button>
 </div>
 
 </div>
