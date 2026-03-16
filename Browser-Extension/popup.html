@@ -1,67 +1,116 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Prompt Logs</title>
+<meta charset="UTF-8">
 
-  <style>
-    body{
-      margin:0;
-      padding:12px;
-      width:320px;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background:#0f172a;
-      color:#e2e8f0;
-    }
+<style>
 
-    h3{
-      margin-top:0;
-      margin-bottom:12px;
-      font-size:16px;
-      font-weight:600;
-      color:#38bdf8;
-      border-bottom:1px solid #1e293b;
-      padding-bottom:6px;
-    }
+body{
+width:260px;
+margin:0;
+padding:20px;
+background:#0f172a;
+color:white;
+font-family:Arial, Helvetica, sans-serif;
+}
 
-    #promptList{
-      max-height:380px;
-      overflow-y:auto;
-    }
+.container{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
 
-    .prompt{
-      background:#1e293b;
-      border:1px solid #334155;
-      border-radius:8px;
-      padding:8px 10px;
-      margin-bottom:8px;
-      font-size:13px;
-      line-height:1.4;
-      transition:all 0.2s ease;
-    }
+.title{
+font-size:18px;
+font-weight:bold;
+color:#22d3ee;
+text-align:center;
+}
 
-    .prompt:hover{
-      background:#273449;
-      border-color:#38bdf8;
-    }
+.subtitle{
+font-size:12px;
+color:#94a3b8;
+text-align:center;
+margin-bottom:8px;
+}
 
-    /* Scrollbar styling */
-    #promptList::-webkit-scrollbar{
-      width:6px;
-    }
+input{
+padding:10px;
+border-radius:6px;
+border:1px solid #334155;
+background:#020617;
+color:white;
+outline:none;
+}
 
-    #promptList::-webkit-scrollbar-thumb{
-      background:#334155;
-      border-radius:4px;
-    }
+input::placeholder{
+color:#64748b;
+}
 
-  </style>
+input:focus{
+border:1px solid #22d3ee;
+box-shadow:0 0 5px #22d3ee;
+}
+
+button{
+padding:10px;
+border:none;
+border-radius:6px;
+background:#06b6d4;
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:all 0.2s;
+}
+
+button:hover{
+background:#0891b2;
+transform:scale(1.03);
+}
+
+.status{
+font-size:12px;
+text-align:center;
+color:#22c55e;
+}
+
+.footer{
+margin-top:8px;
+font-size:10px;
+text-align:center;
+color:#64748b;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<h3>Captured Prompts</h3>
+<div class="container">
 
-<div id="promptList"></div>
+<div class="title">
+Aegis AI Firewall
+</div>
+
+<div class="subtitle">
+Enter your Company ID
+</div>
+
+<input id="company" placeholder="Company ID">
+
+<button id="save">
+Connect Firewall
+</button>
+
+<div id="status" class="status"></div>
+
+<div class="footer">
+AI Prompt Protection Enabled
+</div>
+
+</div>
 
 <script src="popup.js"></script>
 

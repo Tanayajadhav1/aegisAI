@@ -1,19 +1,4 @@
-const data = [
-{
-time:"10:32",
-user:"emp21",
-tool:"ChatGPT",
-risk:"High"
-},
-{
-time:"10:40",
-user:"emp08",
-tool:"Gemini",
-risk:"Medium"
-}
-]
-
-export default function ViolationTable(){
+export default function ViolationTable({violations}){
 
 return(
 
@@ -29,25 +14,42 @@ Recent Violations
 <tr>
 <th>Time</th>
 <th>User</th>
-<th>AI Tool</th>
+<th>Platform</th>
 <th>Risk</th>
 </tr>
 </thead>
 
 <tbody>
 
-{data.map((row,i)=>(
+{violations.map((row)=>{
 
-<tr key={i} className="border-t border-slate-700">
+const time = row.time?.toDate?.()?.toLocaleTimeString?.() || "N/A"
 
-<td className="py-3">{row.time}</td>
-<td>{row.user}</td>
-<td>{row.tool}</td>
-<td className="text-red-400">{row.risk}</td>
+return(
+
+<tr key={row.id} className="border-t border-slate-700">
+
+<td className="py-3">{time}</td>
+
+<td>{row.user || "unknown"}</td>
+
+<td>{row.platform || "unknown"}</td>
+
+<td className={
+row.severity==="HIGH"
+? "text-red-400"
+: row.severity==="MEDIUM"
+? "text-yellow-400"
+: "text-green-400"
+}>
+{row.severity}
+</td>
 
 </tr>
 
-))}
+)
+
+})}
 
 </tbody>
 

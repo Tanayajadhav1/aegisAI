@@ -1,27 +1,16 @@
-const container = document.getElementById("promptList");
+document.getElementById("save").onclick = () => {
 
-chrome.storage.local.get(["prompts"], function (result) {
+const companyId = document.getElementById("company").value
 
-  let prompts = result.prompts || [];
+if(!companyId){
+document.getElementById("status").innerText = "Please enter a company ID"
+return
+}
 
-  if (prompts.length === 0) {
-    container.innerHTML = "No prompts captured.";
-    return;
-  }
+chrome.storage.local.set({company_id: companyId},()=>{
 
-  prompts.reverse().forEach(p => {
+document.getElementById("status").innerText = "Firewall connected"
 
-    const div = document.createElement("div");
+})
 
-    div.className = "prompt";
-
-    div.innerHTML = `
-      <b>Platform:</b> ${p.platform}<br>
-      <b>Prompt:</b> ${p.prompt}
-    `;
-
-    container.appendChild(div);
-
-  });
-
-});
+}

@@ -1,7 +1,60 @@
-console.log("AI Prompt Firewall Loaded");
+console.log("AegisAI - AI Prompt Firewall Loaded");
+let COMPANY_ID = null
 
-const platform = window.location.hostname;
-console.log("Detected platform:", platform);
+chrome.storage.local.get(["company_id"],(result)=>{
+
+COMPANY_ID = result.company_id
+
+console.log("Company ID:",COMPANY_ID)
+
+})
+
+const hostname = window.location.hostname;
+console.log("Detected platform:", hostname);
+
+let platform = "unknown";
+
+if (hostname.includes("chat.openai.com") || hostname.includes("chatgpt.com")) {
+    platform = "chatgpt";
+}
+
+else if (hostname.includes("perplexity.ai")) {
+    platform = "perplexity";
+}
+
+else if (hostname.includes("copilot.microsoft.com") || hostname.includes("bing.com")) {
+    platform = "copilot";
+}
+
+else if (hostname.includes("cursor.sh")) {
+    platform = "cursor";
+}
+
+console.log("Platform identified as:", platform);
+console.log("AI Prompt Firewall protecting:", platform);
+
+const selectors = {
+
+    chatgpt: {
+        input: 'div[contenteditable="true"]',
+        send: 'button[data-testid="send-button"]'
+    },
+
+    perplexity: {
+        input: 'textarea',
+        send: 'button[type="submit"]'
+    },
+
+    copilot: {
+        input: 'textarea',
+        send: 'button[type="submit"]'
+    },
+
+    cursor: {
+        input: 'textarea',
+        send: 'button[type="submit"]'
+    }
+};
 
 /* Save original fetch */
 const originalFetch = window.fetch;
@@ -16,7 +69,11 @@ async function analyzePrompt(prompt) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify({
+            prompt,
+            company_id: COMPANY_ID,
+            platform
+        })
     });
 
     return await response.json();
@@ -56,9 +113,17 @@ function showRiskPopup(result) {
 ------------------------------*/
 function getPromptFromInput() {
 
-    const input = document.querySelector('div[contenteditable="true"]');
+    const selector = selectors[platform];
+
+    if (!selector) return null;
+
+    const input = document.querySelector(selector.input);
 
     if (!input) return null;
+
+    if (input.tagName === "TEXTAREA") {
+        return input.value.trim();
+    }
 
     return input.innerText.trim();
 }
@@ -92,7 +157,7 @@ async function handleSendClick(event) {
 
     console.log("Prompt safe, sending");
 
-    const sendButton = document.querySelector("button[data-testid='send-button']");
+    const sendButton = document.querySelector(selectors[platform].send);
 
     if (sendButton) {
         sendButton.removeEventListener("click", handleSendClick, true);
@@ -135,7 +200,11 @@ async function handleEnterKey(event) {
 
 function attachEnterListener() {
 
-    const input = document.querySelector('div[contenteditable="true"]');
+    const selector = selectors[platform];
+
+    if (!selector) return;
+
+    const input = document.querySelector(selector.input);
 
     if (!input) return;
 
@@ -151,7 +220,11 @@ function attachEnterListener() {
 
 function attachButtonListener() {
 
-    const sendButton = document.querySelector("button[data-testid='send-button']");
+    const selector = selectors[platform];
+
+    if (!selector) return;
+
+    const sendButton = document.querySelector(selector.send);
 
     if (!sendButton) return;
 
