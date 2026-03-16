@@ -1,8 +1,9 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { auth } from "../firebase/firebaseConfig"
+import { auth, db } from "../firebase/firebaseConfig"
 import { createUserWithEmailAndPassword } from "firebase/auth"
+import { doc, setDoc } from "firebase/firestore"
 
 export default function Register(){
 
@@ -17,9 +18,21 @@ e.preventDefault()
 
 try{
 
-await createUserWithEmailAndPassword(auth,email,password)
+const userCredential = await createUserWithEmailAndPassword(auth,email,password)
 
-alert("Admin Registered Successfully")
+const uid = userCredential.user.uid
+
+// generate company id
+const companyId = "AEGIS-" + Math.random().toString(36).substring(2,8).toUpperCase()
+
+// save admin data
+await setDoc(doc(db,"companies",uid),{
+email: email,
+company_id: companyId,
+created_at: new Date()
+})
+
+alert("Admin Registered Successfully\nCompany ID: " + companyId)
 
 navigate("/login")
 
