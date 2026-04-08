@@ -11,17 +11,14 @@ def calculate_risk(keyword_hits, regex_hits, injection_hits, ml_prediction=None)
     if ml_prediction and isinstance(ml_prediction, dict):
         try:
             ml_score = float(ml_prediction.get("score", 0.0))
-            
-            # Use final_label if zero-shot was triggered, otherwise use original label
-            if ml_prediction.get("zero_shot_triggered", False):
-                ml_label = int(ml_prediction.get("final_label", 0))
-            else:
-                ml_label = int(ml_prediction.get("label", 0))
+            # Always use final_label - it's the definitive label after zero-shot analysis
+            # (equals original label if zero-shot didn't trigger)
+            ml_label = int(ml_prediction.get("final_label", 0))
         except Exception:
             ml_score = 0.0
             ml_label = 0
 
-        if ml_label == 1 or ml_label == 2:  # Flag when ML flagged risk (label 1 or 2)
+        if ml_label == 1:  # Flag when ML flagged as PROMPT_INJECTION risk
             if ml_score > 0.75:
                 score += 40
             elif ml_score > 0.55:
