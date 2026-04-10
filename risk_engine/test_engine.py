@@ -1,5 +1,18 @@
-from risk_engine import analyze_prompt
-from risk_engine import ml_detector
+import os
+import sys
+
+# Ensure the repository root is on sys.path so package imports work
+# even when running this file directly from risk_engine/test_engine.py.
+_repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _repo_root not in sys.path:
+	sys.path.insert(0, _repo_root)
+
+try:
+	from risk_engine import analyze_prompt
+	from risk_engine import ml_detector
+except ImportError:
+	from analyzer import analyze_prompt
+	import ml_detector
 
 def main():
 	prompt = input("Enter prompt: ")

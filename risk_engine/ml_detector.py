@@ -97,7 +97,12 @@ def predict(text: str, safe_threshold: Optional[float] = None) -> Dict[str, Any]
     Layer 1: ML risk model (text-classification) - detects risk level (LOW, MEDIUM, HIGH)
     Layer 2: Zero-shot intent classifier (security-focused) - refines assessment
     
-    Args:
+    Args:    git fetch origin
+    git merge --no-commit --no-ff origin/main
+    git checkout --ours -- risk_engine
+    git add risk_engine
+    git commit
+    git push origin main
         text: The prompt text to classify
         safe_threshold: Confidence threshold for triggering zero-shot on LOW risk predictions.
                        If None, uses SAFE_CONFIDENCE_THRESHOLD. Additionally, zero-shot
@@ -297,46 +302,62 @@ def predict(text: str, safe_threshold: Optional[float] = None) -> Dict[str, Any]
                         ]
                         intent_scores.sort(key=lambda x: x[1], reverse=True)
                         highest_intent_label, highest_intent_score = intent_scores[0][0], intent_scores[0][1]
+                        top_intent_label = top_intent
                         
-                        # HIGHEST PRIORITY: If highly suspicious patterns + ML flagged risky, ALWAYS keep risky
-                        if is_highly_suspicious and label_num >= 1:
-                            # Don't correct - keep the risky label
-                            pass
+                        # Explicit zero-shot fixes:
+                        #   HIGH + educational -> MEDIUM (unless the HIGH prediction is very confident)
+                        #   MEDIUM + malicious -> HIGH
+                        if label_num == 2 and top_intent_label == "Educational or defensive security discussion" and score < 0.85:
+                            final_label = 1
+                            final_name = "MEDIUM"
+                            ml_result["final_risk_reason"] = "Downgraded HIGH to MEDIUM due to educational/defensive intent and lower confidence"
+                        elif label_num == 1 and top_intent_label == "Requesting dangerous or harmful information":
+                            final_label = 2
+                            final_name = "HIGH"
+                            ml_result["final_risk_reason"] = "Upgraded MEDIUM to HIGH due to malicious/harmful intent"
                         
-                        # Priority logic: When ML confidence is HIGH + dangerous keywords present,
-                        # the model is likely making an informed decision about the risky nature.
-                        # DO NOT override if:
-                        #   - ML confidence is very high (>0.95) AND
-                        #   - Prompt contains dangerous keywords AND
-                        #   - Zero-shot shows even moderate dangerous intent (>0.1)
-                        elif label_num >= 1 and has_security_keywords and score > 0.95 and dangerous_score > 0.1:
-                            # KEEP the risky classification - strong ML signal + suspicious keywords
-                            pass  # Don't correct
-                        
-                        # For true LOW predictions, use zero-shot to refine between LOW and MEDIUM
-                        elif label_num == 0:
-                            # If highly suspicious patterns detected, always bump to HIGH
-                            if is_highly_suspicious:
-                                final_label = 2
-                                final_name = "HIGH"
-                                ml_result["final_risk"] = "CORRECTED_FN"
-                                ml_result["final_risk_reason"] = f"Highly suspicious keyword pattern detected despite LOW prediction"
-                            # If dangerous keywords + dangerous intent, bump to MEDIUM or HIGH
-                            elif has_security_keywords and dangerous_score > 0.4:
-                                final_label = 2
-                                final_name = "HIGH"
-                                ml_result["final_risk"] = "CORRECTED_FN"
-                                ml_result["final_risk_reason"] = f"Contains dangerous keywords with {dangerous_score:.2f} harmful intent score"
-                            elif dangerous_score > 0.65:
-                                # Strong dangerous signal = upgrade to HIGH
-                                final_label = 2
-                                final_name = "HIGH"
-                                ml_result["final_risk"] = "CORRECTED_FN"
-                                ml_result["final_risk_reason"] = f"Strong dangerous intent detected ({dangerous_score:.2f})"
-                            elif educational_score > benign_score and educational_score > 0.5:
-                                # Education-focused = MEDIUM
-                                final_label = 1
-                                final_name = "MEDIUM"
+                        # Only continue additional zero-shot adjustments if the explicit fix did
+                        # not already change the label.
+                        if final_label == label_num:
+                            # HIGHEST PRIORITY: If highly suspicious patterns + ML flagged risky, ALWAYS keep risky
+                            if is_highly_suspicious and label_num >= 1:
+                                # Don't correct - keep the risky label
+                                pass
+                            
+                            # Priority logic: When ML confidence is HIGH + dangerous keywords present,
+                            # the model is likely making an informed decision about the risky nature.
+                            # DO NOT override if:
+                            #   - ML confidence is very high (>0.95) AND
+                            #   - Prompt contains dangerous keywords AND
+                            #   - Zero-shot shows even moderate dangerous intent (>0.1)
+                            elif label_num >= 1 and has_security_keywords and score > 0.95 and dangerous_score > 0.1:
+                                # KEEP the risky classification - strong ML signal + suspicious keywords
+                                pass  # Don't correct
+                            
+                            # For true LOW predictions, use zero-shot to refine between LOW and MEDIUM
+                            elif label_num == 0:
+                                # If highly suspicious patterns detected, always bump to HIGH
+                                if is_highly_suspicious:
+                                    final_label = 2
+                                    final_name = "HIGH"
+                                    ml_result["final_risk"] = "CORRECTED_FN"
+                                    ml_result["final_risk_reason"] = f"Highly suspicious keyword pattern detected despite LOW prediction"
+                                # If dangerous keywords + dangerous intent, bump to MEDIUM or HIGH
+                                elif has_security_keywords and dangerous_score > 0.4:
+                                    final_label = 2
+                                    final_name = "HIGH"
+                                    ml_result["final_risk"] = "CORRECTED_FN"
+                                    ml_result["final_risk_reason"] = f"Contains dangerous keywords with {dangerous_score:.2f} harmful intent score"
+                                elif dangerous_score > 0.65:
+                                    # Strong dangerous signal = upgrade to HIGH
+                                    final_label = 2
+                                    final_name = "HIGH"
+                                    ml_result["final_risk"] = "CORRECTED_FN"
+                                    ml_result["final_risk_reason"] = f"Strong dangerous intent detected ({dangerous_score:.2f})"
+                                elif educational_score > benign_score and educational_score > 0.5:
+                                    # Education-focused = MEDIUM
+                                    final_label = 1
+                                    final_name = "MEDIUM"
                         
                         # For MEDIUM predictions, check if should escalate to HIGH
                         elif label_num == 1:
